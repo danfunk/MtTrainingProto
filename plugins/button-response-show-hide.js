@@ -126,6 +126,7 @@ jsPsych.plugins["button-response-show-hide"] = (function() {
       };
 
       // clear the show_hide element, but don't clear the display.
+      show_hide_element.html('');
       show_hide_element.hide();
 
       // move on to the next trial
