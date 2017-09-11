@@ -265,6 +265,18 @@ var TEMPLETON_MODULE = (function () {
                 paragraph: paragraph
             };
 
+	    var expectation_trial = {
+    		type: 'button-response-show-hide',
+	    	stimulus: "<p class='center-content'>Before you finish the sentence, how do you think things will turn out?</p>" ,
+	    	choices: ['well', 'badly'],
+            is_html:true,
+            on_finish: function (trial_data) {
+                if (trial_data.correct) score_letters++;
+                updateScore();
+                updateProgress();
+            }
+	    };
+	    
             var phrase_trial = {
                 type: 'missing-letters',
                 phrase: phrase,
@@ -399,8 +411,15 @@ var TEMPLETON_MODULE = (function () {
 
 
             timeline.push(paragraph_trial);
-            timeline.push(phrase_trial);
 
+	    // Only ask a followup question 1/6th of the time.
+//            if(Math.random() <= 0.1666) {
+		timeline.push(expectation_trial)
+//}
+	    timeline.push(phrase_trial);
+
+
+	    
             // Only ask a followup question 2/3rd of the time.
             if(Math.random() >= 0.333) {
                 followup_count++;

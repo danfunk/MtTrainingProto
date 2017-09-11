@@ -119,6 +119,19 @@ img#spinner {
     margin: 100px auto 0 auto;
 }
 
+#button-response-show-hide {
+    display:block;
+    position: relative;
+    color: black;
+    background: lightsteelblue;
+    box-sizing: border-box;
+    border-radius: 25px;
+    margin: 40px auto;
+    border: 1px solid #bbb;
+    max-width: 400px;
+    padding: 20px 50px;
+}
+
 /*
 p {
     font-size: 120%;
