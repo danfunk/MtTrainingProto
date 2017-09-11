@@ -397,6 +397,7 @@ var TEMPLETON_MODULE = (function () {
             // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
             // *********************************************
 
+
             timeline.push(paragraph_trial);
             timeline.push(phrase_trial);
 

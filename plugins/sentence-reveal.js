@@ -47,11 +47,6 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         $('#jspsych-sentence-reveal-btngroup').hide();
         show_continue_button();
 
-        // Add a sound file to play automatically.
-
-        display_element.append('<audio autoplay=true><source src="sounds/dinner.mp3" type="audio/mpeg"/><source src="sounds/dinner.ogg" type="audio/ogg"/></audio>');
-       
-
         // store response
         var response = {
             rt: -1,
