@@ -68,7 +68,6 @@ input[type="text"] {
     cursor: pointer;
     line-height: 1.4;
     text-align: center;
-    white-space: nowrap;
     vertical-align: middle;
     background-image: none;
     border: 1px solid transparent;
@@ -76,6 +75,8 @@ input[type="text"] {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
+    width: 100px;
+    height: 55px;
 }
 
 .jspsych-btn:hover {

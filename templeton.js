@@ -17,7 +17,7 @@
  * And these CSS Files:
  * css/jspsych-mobile.css
  * css/experiment.css
-*/
+ */
 
 var TEMPLETON_MODULE = (function () {
     var my = {};
@@ -37,28 +37,28 @@ var TEMPLETON_MODULE = (function () {
     // Captions to display below session images
     var captions = {
         1: {
-            8:"Keep hanging on.",
-            16:"You are not alone in this!",
-            24:"You are taking off!",
-            32:"You're doing puuuurfect"
+            8: "Keep hanging on.",
+            16: "You are not alone in this!",
+            24: "You are taking off!",
+            32: "You're doing puuuurfect"
         },
         2: {
-            8:"Add a little color!",
-            16:"You're way too fly to give up.",
-            24:"Lookin' good!",
-            32:"Almost There!"
+            8: "Add a little color!",
+            16: "You're way too fly to give up.",
+            24: "Lookin' good!",
+            32: "Almost There!"
         },
         3: {
-            8:"Make yourself heard!",
-            16:"You can pull through!",
-            24:"Spread your wings!",
-            32:"A few more jumps ...."
+            8: "Make yourself heard!",
+            16: "You can pull through!",
+            24: "Spread your wings!",
+            32: "A few more jumps ...."
         },
         4: {
-            8:"Pay attention!",
-            16:"Take a deep breath!",
-            24:"Keep climbing!",
-            32:"You’ve almost got it!"
+            8: "Pay attention!",
+            16: "Take a deep breath!",
+            24: "Keep climbing!",
+            32: "You’ve almost got it!"
         }
     };
 
@@ -71,8 +71,8 @@ var TEMPLETON_MODULE = (function () {
     var vivid_response;
     var followup_count = 0;
 
-    my.execute = function() {
-        if(my.base_url.slice(-1) !== '/') my.base_url = my.base_url + "/";
+    my.execute = function () {
+        if (my.base_url.slice(-1) !== '/') my.base_url = my.base_url + "/";
         if (my.condition != "NEUTRAL") {
             parse_data(my.base_url + "scenarios/scenarios.csv", parse_complete);
         } else {
@@ -147,7 +147,9 @@ var TEMPLETON_MODULE = (function () {
                         "</div>"
                     )
                 },
-                on_finish: function(data){ data.stimulus = "introduction" }
+                on_finish: function (data) {
+                    data.stimulus = "introduction"
+                }
             };
 
         // The Final Score, shown at the end of the experiment.
@@ -194,7 +196,9 @@ var TEMPLETON_MODULE = (function () {
                 '<p>' + feed_back_s + '</p>' +
                 '<p>' + feed_back_c + '</p>')
             },
-            on_finish: function(data){ data.stimulus = "final score screen" }
+            on_finish: function (data) {
+                data.stimulus = "final score screen"
+            }
         };
 
         /* create experiment timeline array */
@@ -219,13 +223,13 @@ var TEMPLETON_MODULE = (function () {
                 case "POSITIVE":
                     positive = true;
                     // Make some positive interactions negative just so people keep paying attention.
-                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
+                    if (k == 4 || k == 13 || k == 24 || k == 32) positive = false;
                     paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
                     break;
                 case "POSITIVE_NEGATION":
                     positive = true;
                     // Make some positive interactions negative just so people keep paying attention.
-                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
+                    if (k == 4 || k == 13 || k == 24 || k == 32) positive = false;
                     paragraph = scenarios[k]["Scenario"].replace("[negation]", scenarios[k]['Negation']);
                     break;
                 case "NEUTRAL":
@@ -260,23 +264,32 @@ var TEMPLETON_MODULE = (function () {
              * SCENARIO BASED TRIALS
              ***********************************************/
 
-            var paragraph_trial = {
+            var paragraph_trial_first_two = {
                 type: 'sentence-reveal',
-                paragraph: paragraph
+                paragraph: paragraph,
+                start_index: 0,
+                max_index: 1 // Show only the first two sentences
             };
 
-	    var expectation_trial = {
-    		type: 'button-response-show-hide',
-	    	stimulus: "<p class='center-content'>Before you finish the story, based on what you've read so far, how do you think things will turn out?</p>" ,
-	    	choices: ['Very badly', 'Somewhat badly', 'Neutral', 'Somewhat well', 'Very well'],
-            is_html:true,
-            on_finish: function (trial_data) {
-                if (trial_data.correct) score_letters++;
-                updateScore();
-                updateProgress();
-            }
-	    };
-	    
+            var expectation_trial = {
+                type: 'button-response-show-hide',
+                stimulus: "<p class='center-content'>Before you finish the story, based on what you've read so far, how do you think things will turn out?</p>",
+                choices: ['Very badly', 'Somewhat badly', 'Neutral', 'Somewhat well', 'Very well'],
+                is_html: true,
+                on_finish: function (trial_data) {
+                    if (trial_data.correct) score_letters++;
+                    updateScore();
+                    updateProgress();
+                }
+            };
+
+            var paragraph_trial_last = {
+                type: 'sentence-reveal',
+                paragraph: paragraph,
+                start_index: 2, // Show only the last sentence
+                max_index: 2
+            };
+
             var phrase_trial = {
                 type: 'missing-letters',
                 phrase: phrase,
@@ -358,7 +371,8 @@ var TEMPLETON_MODULE = (function () {
                             "<img src='" + my.base_url + "images/good-job.png'/>" +
                             "</div>"
                         )
-                    } return (
+                    }
+                    return (
                         "<div class='vividness_followup'>" +
                         "<h1>Thanks. Really try to use your imagination!</h1>" +
                         "<img src='" + my.base_url + "images/imagination.png'/>" +
@@ -368,7 +382,7 @@ var TEMPLETON_MODULE = (function () {
 
                 cont_btn: "continue",
                 on_finish: function (trial_data) {
-                    if(vivid_response) {
+                    if (vivid_response) {
                         trial_data.stimulus = "Good Job"
                     } else {
                         trial_data.stimulus = "Use Imagination"
@@ -380,7 +394,7 @@ var TEMPLETON_MODULE = (function () {
                 type: 'button-response',
                 is_html: true,
                 choices: ['Continue'],
-                stimulus:   "<div class='vividness_followup'>" +
+                stimulus: "<div class='vividness_followup'>" +
                 "<img src='" + my.base_url + "images/s" + my.sessionIndex + "/" + k + ".png'/>" +
                 "<h1>" + captions[my.sessionIndex][k] + "</h1>" +
                 "</div>",
@@ -410,18 +424,18 @@ var TEMPLETON_MODULE = (function () {
             // *********************************************
 
 
-            timeline.push(paragraph_trial);
+            timeline.push(paragraph_trial_first_two);
 
-	    // Only ask a followup question 1/6th of the time.
+            // Only ask a followup question 1/6th of the time.
 //            if(Math.random() <= 0.1666) {
-		timeline.push(expectation_trial)
+            timeline.push(expectation_trial);
 //}
-	    timeline.push(phrase_trial);
+            timeline.push(paragraph_trial_last);
+            timeline.push(phrase_trial);
 
 
-	    
             // Only ask a followup question 2/3rd of the time.
-            if(Math.random() >= 0.333) {
+            if (Math.random() >= 0.333) {
                 followup_count++;
                 switch (my.question_type) {
                     case ("yes_no"):
@@ -446,7 +460,7 @@ var TEMPLETON_MODULE = (function () {
             }
 
             // Add encouraging images if divisible by 8.
-            if(k > 0 && k % 8 == 0) {
+            if (k > 0 && k % 8 == 0) {
                 timeline.push(encourage);
             }
 
@@ -455,18 +469,20 @@ var TEMPLETON_MODULE = (function () {
         timeline.push(vividness_final);
         timeline.push(final_trial_score);
 
-        function saveData(data, callback){
+        function saveData(data, callback) {
 
             $.ajax({
-                type:'post',
+                type: 'post',
                 contentType: 'application/json',
                 cache: false,
                 url: my.post_url, // this is the path to the above PHP script
                 data: data,
                 success: callback,
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus); alert("Error: " + errorThrown);
-                }                });
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus);
+                    alert("Error: " + errorThrown);
+                }
+            });
         }
 
         function redirect() {
@@ -480,14 +496,16 @@ var TEMPLETON_MODULE = (function () {
         images.push(my.base_url + "images/good-job.png");
         images.push(my.base_url + "images/halfway.png");
         images.push(my.base_url + "images/imagination.png");
-        for(var s = 1; s < 5; s++) {
-            for(var i = 8; i < 33; i += 8) {
+        for (var s = 1; s < 5; s++) {
+            for (var i = 8; i < 33; i += 8) {
                 images.push(my.base_url + "images/s" + s + "/" + i + ".png");
             }
         }
         setTimeout(
-        jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }),
-        10000);
+            jsPsych.pluginAPI.preloadImages(images, function () {
+                startExperiment();
+            }),
+            10000);
 
         // Start the experiment.
         function startExperiment() {
@@ -506,22 +524,22 @@ var TEMPLETON_MODULE = (function () {
         }
 
         /*
-        jsPsych.init({
-            timeline: timeline,
-            display_element: $("#" + my.target),
-            on_finish: function (data) {
-                $.ajax({
-                    type:'post',
-                    contentType: 'application/json',
-                    cache: false,
-                    url: my.post_url, // this is the path to the above PHP script
-                    data: data
+         jsPsych.init({
+         timeline: timeline,
+         display_element: $("#" + my.target),
+         on_finish: function (data) {
+         $.ajax({
+         type:'post',
+         contentType: 'application/json',
+         cache: false,
+         url: my.post_url, // this is the path to the above PHP script
+         data: data
 
-                });
-                window.location.assign(my.redirect_url);
-            }
-        });
-        */
+         });
+         window.location.assign(my.redirect_url);
+         }
+         });
+         */
     }
 
     return my;

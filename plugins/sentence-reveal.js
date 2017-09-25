@@ -20,6 +20,9 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         trial.button_html = trial.button_html || '<button class="jspsych-btn">%choice%</button>';
         trial.clear_display = (typeof trial.clear_display === 'undefined') ? false : trial.response_ends_trial;
         trial.button_text = trial.button_text || 'continue ...';
+        trial.start_index = trial.start_index || 0;
+        var sentences = trial.paragraph.split(".");
+        trial.max_index = trial.max_index || sentences.length - 1;
 
         // if any trial variables are functions
         // this evaluates the function and replaces
@@ -30,8 +33,7 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         // that need to be cleared if the trial ends early
         var setTimeoutHandlers = [];
 
-        var sentences = trial.paragraph.split(".");
-        var sentence_index = 0;
+        var sentence_index = trial.start_index;
 
         display_element.append('<div id="jspsych-sentence-reveal-statement" class="center-content block-center"></div>');
         reveal_sentence();
@@ -45,6 +47,7 @@ jsPsych.plugins["sentence-reveal"] = (function () {
             })
         );
         $('#jspsych-sentence-reveal-btngroup').hide();
+
         show_continue_button();
 
         // store response
@@ -61,7 +64,9 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         // reveals the next sentence
         function reveal_sentence() {
             var sentence = sentences[sentence_index];
-            if (sentence_index < sentences.length - 1) sentence += ".";
+            if (sentence_index < sentences.length - 1) {
+                sentence += ".";
+            }
 
             $('#jspsych-sentence-reveal-statement')
                 .append($('<p>', {
@@ -87,7 +92,7 @@ jsPsych.plugins["sentence-reveal"] = (function () {
                 reveal_sentence();
             }
 
-            if (sentence_index == sentences.length - 1) {
+            if (sentence_index == trial.max_index) {
                 end_trial();
             } else {
                 show_continue_button();
@@ -99,7 +104,11 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         function show_continue_button() {
             var timing_fixation = sentences[sentence_index].split(' ').length * 100;
             setTimeout(function() {
-                $('#jspsych-sentence-reveal-btngroup').show();
+                if(sentence_index == trial.max_index) {
+                    after_response()
+                } else {
+                    $('#jspsych-sentence-reveal-btngroup').show();
+                }
             }, timing_fixation);
         }
 
