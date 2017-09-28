@@ -87,16 +87,17 @@ jsPsych.plugins["sentence-reveal"] = (function () {
 
             $('#jspsych-sentence-reveal-btngroup').hide();
 
-            if (sentence_index < sentences.length - 1) {
-                sentence_index++;
-                reveal_sentence();
+            sentence_index++;
+
+            if (sentence_index > trial.max_index) {
+                end_trial();
             }
 
-            if (sentence_index == trial.max_index) {
-                end_trial();
-            } else {
+            if (sentence_index <= trial.max_index) {
+                reveal_sentence();
                 show_continue_button();
             }
+
         }
 
         // Shows the continue button, but only after a pause based of 10ms for each word
@@ -104,8 +105,8 @@ jsPsych.plugins["sentence-reveal"] = (function () {
         function show_continue_button() {
             var timing_fixation = sentences[sentence_index].split(' ').length * 100;
             setTimeout(function() {
-                if(sentence_index == trial.max_index) {
-                    after_response()
+                if(sentence_index == sentences.length - 1) {
+                    end_trial();
                 } else {
                     $('#jspsych-sentence-reveal-btngroup').show();
                 }
