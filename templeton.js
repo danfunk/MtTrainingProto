@@ -273,7 +273,7 @@ var TEMPLETON_MODULE = (function () {
 
             var expectation_trial = {
                 type: 'button-response-show-hide',
-                stimulus: "<p class='center-content'>Before you finish the story, based on what you've read so far, how do you think things will turn out?</p>",
+                stimulus: "<p class='center-content'>Based on this part of the story, how do you think this will turn out?</p>",
                 choices: ['Very badly', 'Somewhat badly', 'Neutral', 'Somewhat well', 'Very well'],
                 is_html: true,
                 on_finish: function (trial_data) {
