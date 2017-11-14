@@ -128,16 +128,16 @@ var TEMPLETON_MODULE = (function () {
                     return (
                         "<div class='piIntro'> " +
                         "<img src='" + my.base_url + "images/compass-blue.png' > " +
-                        "<p>In this part of the program, you will read a series of very " +
+                        "<p>In this part of the program, you will listen to a series of very " +
                         "short stories.  Pay attention to the title of each story because " +
-                        "after you have read all the stories, you will be asked more questions about them.</p> " +
+                        "after you have heard all the stories, you will be asked more questions about them.</p> " +
                         "<br clear='all'> " +
                         "<b>For each story:</b> " +
                         "<ul> " +
-                        "<li>Read each sentence carefully and <i>really imagine</i> yourself in the situation described. </li>" +
+                        "<li>Listen carefully and <i>really imagine</i> yourself in the situation described. </li>" +
                         "<li>Even if the story describes you reacting in a way that you would not usually react, please " +
                         "try to picture yourself responding in the way the story describes. </li> " +
-                        "<li>There will be an incomplete word at the end of each paragraph. </li> " +
+                        "<li>There will be an incomplete word at the end of each story. </li> " +
                         "<li>Press the key(s) on the keyboard that complete the word.  </li> " +
                         "<li>When you correctly complete the word you will move on to the next screen and be asked a " +
                         "question about the story. </li> " +
@@ -214,7 +214,7 @@ var TEMPLETON_MODULE = (function () {
             var yes_no_correct;
             var mc1_correct;
             var mc2_correct;
-
+            const length = parseInt(scenarios[k]['Length']) * 1000;
             switch (my.condition) {
                 case "POSITIVE":
                     positive = true;
@@ -264,6 +264,13 @@ var TEMPLETON_MODULE = (function () {
                 type: 'sentence-reveal',
                 paragraph: paragraph
             };
+
+            var sound_trial = {
+                type: 'single-audio',
+                stimulus: 'sounds/' + paragraph + '.ogg',
+                timing_response: length,
+                prompt: "<img class='sound_image' src='images/" + paragraph + ".jpg'>"
+            }
 
             var phrase_trial = {
                 type: 'missing-letters',
@@ -397,7 +404,8 @@ var TEMPLETON_MODULE = (function () {
             // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
             // *********************************************
 
-            timeline.push(paragraph_trial);
+            //timeline.push(paragraph_trial);
+            timeline.push(sound_trial);
             timeline.push(phrase_trial);
 
             // Only ask a followup question 2/3rd of the time.

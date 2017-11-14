@@ -74,7 +74,7 @@ div.piPlayerHeader {
 
 
 #container {
-    background-image:url("../images/table.jpg");
+/*    background-image:url("../images/table.jpg");*/
     display:block;
     position: relative;
     color: black;
@@ -115,6 +115,12 @@ div.vividness_followup img {
 img#spinner {
     display:block;
     margin: 100px auto 0 auto;
+}
+
+img.sound_image {
+    display: block;
+    max-width: 100%;
+    margin: auto;
 }
 
 /*
