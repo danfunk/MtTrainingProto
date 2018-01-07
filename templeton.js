@@ -1,7 +1,7 @@
 // REQUIREMENTS:
 /*
 
- The loading file will need to include the following libraries
+ The lexercisefile will need to include the following libraries
  * Jquery 1.11.1 or higher
  * jspsych
  * mootools
@@ -150,6 +150,25 @@ var TEMPLETON_MODULE = (function () {
                 on_finish: function(data){ data.stimulus = "introduction" }
             };
 
+        var lemon_exercise = {
+            type: 'instructions',
+            show_clickable_nav: true,
+            pages: [
+                '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
+                '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i>, not as an outside observer…</p>' +
+                    '<div style="margin:auto"><img src="images/lemon/firstperson.png" style="padding: 20px 20px;"><img style="padding: 20px 20px;" src="images/lemon/secondperson.png"></div>',
+                '<h1>Ok, lets begin:</h1> <h1>Imagine you are holding the lemon in your hand.</h1><p><i>Do you feel it\'s shape and weight in your hand?</i></p>',
+                '<h1>Now you are shining a light on the lemon...</h1><p><i>Do you see the way lumpy texture of the skin?</i></p>',
+                '<h1>Now you scratch the skin with your fingernail...</h1><p><i>Bringing it to your nose, can you smell the fresh zesty juice from the skin?</i></p>',
+                '<h1>Now imagine you cut the lemon in half, and you bring one half of it up for a closer look…</h1><p><i>Notice the shape of the segments, and how the flesh looks</i></p>',
+                '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes…</h1><p><i>Does it sting?</i></p>',
+                '<h1>That was the lemon exercise, you did it!</h1> <p>Don’t worry if you didn’t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
+                    '<p>Now Please rate your experience on the next page.</p>' +
+                    '<img src="images/lemon/lemon.png" style="margin: auto; padding: 20px 20px;">'
+            ]
+        };
+
+
         // The Final Score, shown at the end of the experiment.
         var final_trial_score = {
             type: 'button-response',
@@ -197,10 +216,23 @@ var TEMPLETON_MODULE = (function () {
             on_finish: function(data){ data.stimulus = "final score screen" }
         };
 
+        var vividness = {
+            type: 'button-response',
+            is_html: true,
+            stimulus: 'How vividly did you imagine yourself in the scenario?',
+            choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+            on_finish: function (trial_data) {
+                vivid_response = trial_data.button_pressed > 2;
+                trial_data.stimulus = "vividness"
+            }
+        };
+
         /* create experiment timeline array */
         var timeline = [];
 
         timeline.push(introduction);
+        timeline.push(lemon_exercise);
+        timeline.push(vividness);
 
         // Randomize the scenarios
         scenarios = jsPsych.randomization.sample(scenarios, my.total_scenarios, false);
@@ -319,16 +351,7 @@ var TEMPLETON_MODULE = (function () {
                 }
             };
 
-            var vividness = {
-                type: 'button-response',
-                is_html: true,
-                stimulus: 'How vividly did you imagine yourself in the scenario?',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                on_finish: function (trial_data) {
-                    vivid_response = trial_data.button_pressed > 2;
-                    trial_data.stimulus = "vividness"
-                }
-            };
+
 
             var vividness_final = {
                 type: 'button-response',
