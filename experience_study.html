@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>
+<html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>
+<html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="not-ie" lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head>
+
+    <script src="js/papaparse.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jsPsych-6.0/jspsych.js"></script>
+
+    <!-- JS Psych Plugins -->
+    <script src="js/jsPsych-6.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="js/jsPsych-6.0/plugins/jspsych-audio-button-response.js"></script>
+    <script src="js/jsPsych-6.0/plugins/jspsych-instructions.js"></script>
+
+    <script src="plugins/missing-letters.js"></script>
+    <script src="plugins/sentence-reveal.js"></script>
+    <script src="plugins/button-response-correct.js"></script>
+
+    <script src="experience_study.js"></script>
+
+    <link href="css/jspsych-mobile.css"  rel="stylesheet" type="text/css"/>
+    <link href="css/experiment.css" rel="stylesheet" type="text/css"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+</head>
+<body>
+<!--
+<div class="piPlayerHeader">
+    <img src="images/header-minimal.png"/>
+</div>
+-->
+<div id="container">
+    <div class="status">
+        <span id="score"></span>
+        <span id="progress"></span>
+    </div>
+    <div id="jspsych-target">
+        <img id="spinner" src="images/spinner.gif"/>
+    </div>
+</div>
+
+</body>
+
+<script th:inline="javascript">
+
+    // Warn people about leaving the page before they complete all the questions
+    window.onbeforeunload = function() {
+        return 'Are you sure you want to exit this training session?'
+    };
+
+    /*<![CDATA[*/
+
+    EXPERIENCE_STUDY.condition = /*[[${condition}]]*/ "POSITIVE";
+    EXPERIENCE_STUDY.sessionIndex   = /*[[${sessionIndex}]]*/ "1";
+    EXPERIENCE_STUDY.letters_to_remove = /*[[${lettersToRemove}]]*/ 1;
+    EXPERIENCE_STUDY.total_scenarios = 3;
+    EXPERIENCE_STUDY.second_word_set = /*[[${secondWordSet}]]*/ true;
+    EXPERIENCE_STUDY.question_type = /*[[${question}]]*/ "question";
+    EXPERIENCE_STUDY.block_size = 5;
+    EXPERIENCE_STUDY.target = "jspsych-target";
+    EXPERIENCE_STUDY.base_url = /*[[@{/js/training}]]*/ './';
+    EXPERIENCE_STUDY.post_url = /*[[@{/jspsych}]]*/ '../jspsych';
+    EXPERIENCE_STUDY.redirect_url = /*[[@{/jspsych/completed/JsPsychTrial}]]*/ '../jspsych/completed/JsPsychTrial';
+
+    EXPERIENCE_STUDY.execute();
+
+    /*]]>*/
+</script>
+</html>

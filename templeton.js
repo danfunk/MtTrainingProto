@@ -17,6 +17,17 @@
  * And these CSS Files:
  * css/jspsych-mobile.css
  * css/experiment.css
+
+ 1/2 auditory
+ - no picture
+ - picture BEFORE scenario for 5 seconds (more or less)
+ - picture and noise for 5 seconds
+ 1/2 reading
+ - no picture
+ - picture BEFORE scenario for 5 seconds (more or less)
+ - picture and noise for 5 seconds
+
+
 */
 
 var TEMPLETON_MODULE = (function () {

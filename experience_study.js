@@ -1,0 +1,420 @@
+
+
+var EXPERIENCE_STUDY = (function () {
+    var my = {};
+
+    my.letters_to_remove = 2; // number of missing letters to complete in the term.
+    my.total_scenarios = 24;  // How many scenarios should be randomly selected out of the full set?
+    my.block_size = 4; // Number of items in block
+    my.question_type = "yes_no";  // Can be yes_no, mc1, or mc2.
+    my.traget = "jspsych-target";
+    my.base_url = "/js/training";
+    my.post_url = "/jspsych";
+    my.redirect_url = "/jspsych/continue";
+    my.sessionIndex = 1;
+
+
+
+    // This score is incremented for every correct answer and displayed
+    // to the user.
+    var score_letters = 0;
+    var score_questions = 0;
+    var progress = -1;
+    var vivid_response;
+    var followup_count = 0;
+
+    my.execute = function() {
+        if(my.base_url.slice(-1) !== '/') my.base_url = my.base_url + "/";
+        parse_data(my.base_url + "scenarios/scenarios.csv", parse_complete);
+    };
+
+    function parse_data(url, callBack) {
+        Papa.parse(url, {
+            download: true,
+            dynamicTyping: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: function (results) {
+                callBack(results.data);
+            }
+        });
+    }
+
+    function parse_complete(data) {
+        updateProgress();
+        updateScore();
+        build_timeline(data);
+    }
+
+    // DISPLAY SCORE AND PROGRESS
+    // ***************
+
+    function updateScore() {
+        document.getElementById('score').textContent = "Score: " + (score_letters + score_questions);
+    }
+
+    function updateProgress() {
+        progress++;
+        document.getElementById('progress').textContent =
+            "Completed : " + progress + " of " + my.total_scenarios;
+    }
+
+
+    // This is called when we complete parsing the CSV file (see parseData above),
+    // and will in tern build all the trials.
+    function build_timeline(scenarios) {
+
+        /***********************************************
+         * STATIC TRIALS
+         ***********************************************/
+            // An introduction / instructions
+        var introduction = {
+                type: 'html-button-response',
+                choices: ['Continue'],
+                stimulus: function () {
+                    return (
+                        "<div class='piIntro'> " +
+                        "<img src='" + my.base_url + "images/compass-blue.png' > " +
+                        "<p>In this part of the program, you will listen to a series of very " +
+                        "short stories.  Pay attention to the title of each story because " +
+                        "after you have heard all the stories, you will be asked more questions about them.</p> " +
+                        "<br clear='all'> " +
+                        "<b>For each story:</b> " +
+                        "<ul> " +
+                        "<li>Listen carefully and <i>really imagine</i> yourself in the situation described. </li>" +
+                        "<li>Even if the story describes you reacting in a way that you would not usually react, please " +
+                        "try to picture yourself responding in the way the story describes. </li> " +
+                        "<li>There will be an incomplete word at the end of each story. </li> " +
+                        "<li>Press the key(s) on the keyboard that complete the word.  </li> " +
+                        "<li>When you correctly complete the word you will move on to the next screen and be asked a " +
+                        "question about the story. </li> " +
+                        "<li>The score, located in the top right corner, shows the number of times you completed a word " +
+                        "or answered a question correctly on the first try. </li> " +
+                        "</ul> " +
+                        "</div>"
+                    )
+                },
+                on_finish: function(data){ data.stimulus = "introduction" }
+            };
+
+        var lemon_exercise = {
+            type: 'instructions',
+            show_clickable_nav: true,
+            pages: [
+                '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
+                '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i>, not as an outside observer…</p>' +
+                    '<div style="margin:auto"><img src="images/lemon/firstperson.png" style="padding: 20px 20px;"><img style="padding: 20px 20px;" src="images/lemon/secondperson.png"></div>',
+                '<h1>Ok, lets begin:</h1> <h1>Imagine you are holding the lemon in your hand.</h1><p><i>Do you feel it\'s shape and weight in your hand?</i></p>',
+                '<h1>Now you are shining a light on the lemon...</h1><p><i>Do you see the way lumpy texture of the skin?</i></p>',
+                '<h1>Now you scratch the skin with your fingernail...</h1><p><i>Bringing it to your nose, can you smell the fresh zesty juice from the skin?</i></p>',
+                '<h1>Now imagine you cut the lemon in half, and you bring one half of it up for a closer look…</h1><p><i>Notice the shape of the segments, and how the flesh looks</i></p>',
+                '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes…</h1><p><i>Does it sting?</i></p>',
+                '<h1>That was the lemon exercise, you did it!</h1> <p>Don’t worry if you didn’t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
+                    '<p>Now Please rate your experience on the next page.</p>' +
+                    '<img src="images/lemon/lemon.png" style="margin: auto; padding: 20px 20px;">'
+            ]
+        };
+
+        var vividness = {
+            type: 'html-button-response',
+            is_html: true,
+            stimulus: 'How vividly did you imagine yourself in the scenario?',
+            choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+            on_finish: function (trial_data) {
+                vivid_response = trial_data.button_pressed > 2;
+                trial_data.stimulus = "vividness"
+            }
+        };
+
+        /* create experiment timeline array */
+        var timeline = [];
+
+
+        var phrase = {
+            type: 'missing-letters',
+            phrase: "restful",
+            letters_to_remove: 2,
+            on_finish: function (trial_data) {
+                if (trial_data.correct) score_letters++;
+                updateScore();
+                updateProgress();
+            }
+        };
+        timeline.push(phrase);
+
+        timeline.push(introduction);
+        timeline.push(lemon_exercise);
+        timeline.push(vividness);
+
+        // Randomize the scenarios
+        scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
+        // Loop through the time-line creating scenarios
+        var positive = true;
+        for (var k = 0; k < my.total_scenarios; k++) {
+
+            var paragraph;
+            var phrase;
+            var yes_no_correct;
+            var mc1_correct;
+            var mc2_correct;
+            const length = parseInt(scenarios[k]['Length']) * 1000;
+            switch (my.condition) {
+                case "POSITIVE":
+                    positive = true;
+                    // Make some positive interactions negative just so people keep paying attention.
+                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
+                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
+                    break;
+                case "POSITIVE_NEGATION":
+                    positive = true;
+                    // Make some positive interactions negative just so people keep paying attention.
+                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
+                    paragraph = scenarios[k]["Scenario"].replace("[negation]", scenarios[k]['Negation']);
+                    break;
+                case "NEUTRAL":
+                    positive = true;
+                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
+                    break;
+                case "FIFTY_FIFTY_RANDOM":
+                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
+                    positive = Math.random() >= 0.5;
+                    break;
+                case "FIFTY_FIFTY_BLOCKED":
+                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
+                    if (k > 0 && k % my.block_size == 0) positive = !positive;
+                    break;
+            }
+
+            if (positive) {
+                phrase = scenarios[k]['PositiveS'];
+                yes_no_correct = scenarios[k]['PositiveQ'];
+                mc1_correct = scenarios[k]['mc1pos'];
+                mc2_correct = scenarios[k]['mc2pos'];
+            } else {
+                phrase = scenarios[k]['NegativeS'];
+                yes_no_correct = scenarios[k]['PositiveQ'] === "Yes" ? "No" : "Yes";
+                mc1_correct = scenarios[k]['mc1pos'] === "a" ? "b" : "a";
+                mc2_correct = scenarios[k]['mc2pos'] === "a" ? "b" : "a";
+            }
+
+            /***********************************************
+             * SCENARIO BASED TRIALS
+             ***********************************************/
+
+            var sound_trial = {
+                type: 'audio-button-response',
+                stimulus: 'sounds/' + paragraph + '.ogg',
+                trial_ends_after_audio: true,
+                prompt: "<img class='sound_image' src='images/" + paragraph + ".jpg'>"
+            };
+
+            var phrase_trial = {
+                type: 'missing-letters',
+                phrase: phrase,
+                letters_to_remove: my.letters_to_remove,
+                on_finish: function (trial_data) {
+                    if (trial_data.correct) score_letters++;
+                    updateScore();
+                    updateProgress();
+                }
+            };
+
+            var yes_no = {
+                type: 'button-response-correct',
+                is_html: true,
+                stimulus: scenarios[k]['Questions'],
+                choices: ["Yes", "No"],
+                correct_choice: yes_no_correct,
+                on_finish: function (trial_data) {
+                    if (trial_data.correct) score_questions++;
+                    updateScore();
+                }
+            };
+
+            var mc1 = {
+                type: 'button-response-correct',
+                is_html: true,
+                stimulus: scenarios[k]['MultipleChoice1'],
+                choices: [scenarios[k]['mc1a'], scenarios[k]['mc1b']],
+                correct_choice: mc1_correct == "a" ? scenarios[k]['mc1a'] : scenarios[k]['mc1b'],
+                on_finish: function (trial_data) {
+                    if (trial_data.correct) score_questions++;
+                    updateScore();
+                }
+            };
+
+            var mc2 = {
+                type: 'button-response-correct',
+                is_html: true,
+                stimulus: scenarios[k]['MultipleChoice2'],
+                choices: [scenarios[k]['mc2a'], scenarios[k]['mc2b']],
+                correct_choice: mc2_correct == "a" ? scenarios[k]['mc2a'] : scenarios[k]['mc2b'],
+                on_finish: function (trial_data) {
+                    if (trial_data.correct) score_questions++;
+                    updateScore();
+                }
+            };
+
+
+
+            var vividness_final = {
+                type: 'html-button-response',
+                stimulus: 'Thinking about the set of 40 scenarios you just completed, on average, how vividly did you imagine yourself in the scenarios?',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                on_finish: function (trial_data) {
+                    trial_data.stimulus = "vividness_final"
+                }
+            };
+
+            // Vivid Follow up - changes based on response.
+            var vividness_followup = {
+                type: 'html-button-response',
+                choices: ['Continue'],
+                stimulus: function () {
+                    if (vivid_response) {
+                        return (
+                            "<div class='vividness_followup'>" +
+                            "<h1>Thanks. It's great you're really using your imagination!</h1>" +
+                            "<img src='" + my.base_url + "images/good-job.png'/>" +
+                            "</div>"
+                        )
+                    } return (
+                        "<div class='vividness_followup'>" +
+                        "<h1>Thanks. Really try to use your imagination!</h1>" +
+                        "<img src='" + my.base_url + "images/imagination.png'/>" +
+                        "</div>"
+                    )
+                },
+
+                cont_btn: "continue",
+                on_finish: function (trial_data) {
+                    if(vivid_response) {
+                        trial_data.stimulus = "Good Job"
+                    } else {
+                        trial_data.stimulus = "Use Imagination"
+                    }
+                }
+            };
+
+
+            // Vivid Follow up - changes based on response.
+            var vividness_followup_halfway = {
+                type: 'html-button-response',
+                choices: ['Continue'],
+                stimulus: function () {
+                    return (
+                        "<div class='vividness_followup'>" +
+                        "<h1>You are halfway done!</h1>" +
+                        "<img src='" + my.base_url + "images/halfway.png'/>" +
+                        "</div>"
+                    )
+                },
+                on_finish: function (trial_data) {
+                    trial_data.stimulus = "Half Way"
+                }
+            };
+
+
+            // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
+            // *********************************************
+
+            //timeline.push(paragraph_trial);
+            timeline.push(sound_trial);
+            timeline.push(phrase_trial);
+
+            // Only ask a followup question 2/3rd of the time.
+            if(Math.random() >= 0.333) {
+                followup_count++;
+                switch (my.question_type) {
+                    case ("yes_no"):
+                        timeline.push(yes_no);
+                        break;
+                    case ("mc1"):
+                        timeline.push(mc1);
+                        break;
+                    case ("mc2"):
+                        timeline.push(mc2);
+                        break;
+                }
+            }
+
+            // Add vividness question after questions 1 and 2...
+            if (k == 0 || k == 1) {
+                timeline.push(vividness);
+                timeline.push(vividness_followup);
+            } else if (k == Math.floor(my.total_scenarios / 2) - 1) {
+                timeline.push(vividness);
+                timeline.push(vividness_followup_halfway);
+            }
+
+        }
+
+        timeline.push(vividness_final);
+
+        function saveData(data, callback){
+
+            $.ajax({
+                type:'post',
+                contentType: 'application/json',
+                cache: false,
+                url: my.post_url, // this is the path to the above PHP script
+                data: data,
+                success: callback,
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                }                });
+        }
+
+        function redirect() {
+            window.location.assign(my.redirect_url);
+        }
+
+        // Preload images
+        // an array of paths to images that need to be loaded
+        var images = [];
+        images.push(my.base_url + "images/finished.png");
+        images.push(my.base_url + "images/good-job.png");
+        images.push(my.base_url + "images/halfway.png");
+        images.push(my.base_url + "images/imagination.png");
+        for(var s = 1; s < 5; s++) {
+            for(var i = 8; i < 33; i += 8) {
+                images.push(my.base_url + "images/s" + s + "/" + i + ".png");
+            }
+        }
+        setTimeout(
+        jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }),
+        10000);
+
+        // Start the experiment.
+        function startExperiment() {
+            $("#spinner").hide();
+            jsPsych.init({
+                timeline: timeline,
+                display_element:  my.target,
+                on_finish: function (data) {
+                    window.onbeforeunload = null; // Remove any warnings about leaving the page.
+                    jsPsych.data.addProperties({
+                        condition: my.condition
+                    });
+                    saveData(jsPsych.data.dataAsJSON(), redirect)
+                }
+            });
+        }
+
+    }
+
+    return my;
+}());
+
+
+
+
+
+
+
+
+
+
+
+
+
