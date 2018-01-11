@@ -127,7 +127,7 @@ jsPsych.plugins["missing-letters"] = (function () {
                     end_trial();
                 }
             }, 500);
-            
+
         }
 
 

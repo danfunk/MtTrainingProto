@@ -35,12 +35,6 @@ jsPsych.plugins["sentence-reveal"] = (function () {
                 pretty_name: 'Button text',
                 default: 'continue ...',
                 description: 'What to show on the button'
-            },
-            clear_display: {
-                type: jsPsych.plugins.parameterType.BOOL,
-                pretty_name: 'Clear Display',
-                default: false,
-                description: 'Should the display be cleared after showing the full paragraph'
             }
         }
     }
@@ -149,8 +143,10 @@ jsPsych.plugins["sentence-reveal"] = (function () {
             if (trial.clear_display)
                 display_element.html('');
 
-            // move on to the next trial
-            jsPsych.finishTrial(trial_data);
+            // move on to the next trial, but give folks a few seconds to see the final sentence
+            setTimeout(function () {
+                jsPsych.finishTrial(trial_data);
+            }, 3000);
         }
 
         // start timing

@@ -1,0 +1,4 @@
+Scenario,Length,Negation,PositiveS,PositiveS2,NegativeS,NegativeS2,Questions,PositiveQ,NegativeQ,MultipleChoice1,mc1a,mc1b,mc1pos,MultipleChoice2,mc2a,mc2b,mc2pos
+meeting,12,,tolerable,manageable,intolerable,intense,Will you regain your composure during the meeting?,Yes,No,,,,,,,,
+speech,10,,themselves,one another,your speech,your appearance,Do you think people appreciate your speech?,Yes,No,,,,,,,,
+whiteboard,18,,normal,intelligent,not ready,inadequate,Do you make a good impression on the other students?,Yes,No,,,,,,,,

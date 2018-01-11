@@ -13,8 +13,6 @@ var EXPERIENCE_STUDY = (function () {
     my.redirect_url = "/jspsych/continue";
     my.sessionIndex = 1;
 
-
-
     // This score is incremented for every correct answer and displayed
     // to the user.
     var score_letters = 0;
@@ -44,6 +42,19 @@ var EXPERIENCE_STUDY = (function () {
         updateProgress();
         updateScore();
         build_timeline(data);
+    }
+
+    /**
+     * Randomize array element order in-place.
+     * Using Durstenfeld shuffle algorithm. (taken from Stackoverflow - Laurens Holst)
+     */
+    function shuffleArray(array) {
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
     }
 
     // DISPLAY SCORE AND PROGRESS
@@ -128,85 +139,84 @@ var EXPERIENCE_STUDY = (function () {
 
         /* create experiment timeline array */
         var timeline = [];
-
-
-        var phrase = {
-            type: 'missing-letters',
-            phrase: "restful",
-            letters_to_remove: 2,
-            on_finish: function (trial_data) {
-                if (trial_data.correct) score_letters++;
-                updateScore();
-                updateProgress();
-            }
-        };
-        timeline.push(phrase);
-
-        timeline.push(introduction);
-        timeline.push(lemon_exercise);
-        timeline.push(vividness);
+        //timeline.push(introduction);
+        //timeline.push(lemon_exercise);
+        //timeline.push(vividness);
 
         // Randomize the scenarios
-        scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
+        // scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
+
+        // Scenarios are in order, groups by three types of Auditory (no immersion, image before, and image sound before)
+        // followed by three types of Visual.   We want to randomize the occurrence of these 6 different types
+        var starts = [1,4,8,12,16,20]
+        shuffleArray(starts);
+        var new_scenarios = [];
+        for (var si = 0; si < starts.length; si++) {
+            new_scenarios = new_scenarios.concat(scenarios.slice(starts[si],starts[si]+4))
+        }
+        scenarios = new_scenarios;
+
         // Loop through the time-line creating scenarios
         var positive = true;
-        for (var k = 0; k < my.total_scenarios; k++) {
-
+        for (var k = 0; k < scenarios.length; k++) {
+            var scenario;
             var paragraph;
             var phrase;
+            var immersion;
             var yes_no_correct;
             var mc1_correct;
             var mc2_correct;
-            const length = parseInt(scenarios[k]['Length']) * 1000;
-            switch (my.condition) {
-                case "POSITIVE":
-                    positive = true;
-                    // Make some positive interactions negative just so people keep paying attention.
-                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
-                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
-                    break;
-                case "POSITIVE_NEGATION":
-                    positive = true;
-                    // Make some positive interactions negative just so people keep paying attention.
-                    if(k == 4 || k == 13 || k == 24 || k == 32) positive = false;
-                    paragraph = scenarios[k]["Scenario"].replace("[negation]", scenarios[k]['Negation']);
-                    break;
-                case "NEUTRAL":
-                    positive = true;
-                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
-                    break;
-                case "FIFTY_FIFTY_RANDOM":
-                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
-                    positive = Math.random() >= 0.5;
-                    break;
-                case "FIFTY_FIFTY_BLOCKED":
-                    paragraph = scenarios[k]['Scenario'].replace("[negation]", "");
-                    if (k > 0 && k % my.block_size == 0) positive = !positive;
-                    break;
-            }
+            var format;
+
+            paragraph = scenarios[k]['Paragraph'];
+            scenario = scenarios[k]['Scenario'];
+            format = scenarios[k]['Format'];
+            immersion = scenarios[k]['Immersion']
+            positive = true;
 
             if (positive) {
                 phrase = scenarios[k]['PositiveS'];
                 yes_no_correct = scenarios[k]['PositiveQ'];
                 mc1_correct = scenarios[k]['mc1pos'];
                 mc2_correct = scenarios[k]['mc2pos'];
-            } else {
-                phrase = scenarios[k]['NegativeS'];
-                yes_no_correct = scenarios[k]['PositiveQ'] === "Yes" ? "No" : "Yes";
-                mc1_correct = scenarios[k]['mc1pos'] === "a" ? "b" : "a";
-                mc2_correct = scenarios[k]['mc2pos'] === "a" ? "b" : "a";
             }
 
             /***********************************************
              * SCENARIO BASED TRIALS
              ***********************************************/
 
-            var sound_trial = {
-                type: 'audio-button-response',
-                stimulus: 'sounds/' + paragraph + '.ogg',
-                trial_ends_after_audio: true,
-                prompt: "<img class='sound_image' src='images/" + paragraph + ".jpg'>"
-            };
+            var immersion_trial = null;
+
+            if(immersion === "picture") {
+                immersion_trial = {
+                    type: 'html-button-response',
+                    stimulus: "<img class='sound_image' src='images/" + scenario + ".jpg'>",
+                    trial_duration: 5000 // Show trial for 5 seconds
+                }
+            } else if (immersion === "picture_sound") {
+                immersion_trial = {
+                    type: 'audio-button-response',
+                    stimulus: 'sounds/background/' + scenario + '.mp3',
+                    trial_duration: 5000, // Show trial for 5 seconds
+                    prompt: "<img class='sound_image' src='images/" + scenario + ".jpg'>"
+                }
+            }
+
+            var main_trial = null;
+
+            if(format === "Auditory") {
+                main_trial = {
+                    type: 'audio-button-response',
+                    stimulus: 'sounds/' + scenario + '.mp3',
+                    trial_ends_after_audio: true,
+                    prompt: "<img class='sound_image' src='images/" + scenario + ".jpg'>"
+                };
+            } else {
+                main_trial = {
+                    type: 'sentence-reveal',
+                    paragraph: paragraph
+                };
+            }
 
             var phrase_trial = {
                 type: 'missing-letters',
@@ -230,32 +240,6 @@ var EXPERIENCE_STUDY = (function () {
                     updateScore();
                 }
             };
-
-            var mc1 = {
-                type: 'button-response-correct',
-                is_html: true,
-                stimulus: scenarios[k]['MultipleChoice1'],
-                choices: [scenarios[k]['mc1a'], scenarios[k]['mc1b']],
-                correct_choice: mc1_correct == "a" ? scenarios[k]['mc1a'] : scenarios[k]['mc1b'],
-                on_finish: function (trial_data) {
-                    if (trial_data.correct) score_questions++;
-                    updateScore();
-                }
-            };
-
-            var mc2 = {
-                type: 'button-response-correct',
-                is_html: true,
-                stimulus: scenarios[k]['MultipleChoice2'],
-                choices: [scenarios[k]['mc2a'], scenarios[k]['mc2b']],
-                correct_choice: mc2_correct == "a" ? scenarios[k]['mc2a'] : scenarios[k]['mc2b'],
-                on_finish: function (trial_data) {
-                    if (trial_data.correct) score_questions++;
-                    updateScore();
-                }
-            };
-
-
 
             var vividness_final = {
                 type: 'html-button-response',
@@ -318,35 +302,17 @@ var EXPERIENCE_STUDY = (function () {
             // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
             // *********************************************
 
+            if(k%4 === 0 && k !== 0) {
+                timeline.push(vividness)
+                timeline.push(vividness_followup)
+            }
             //timeline.push(paragraph_trial);
-            timeline.push(sound_trial);
+            if(immersion_trial !== null) {
+                timeline.push(immersion_trial);
+            }
+            timeline.push(main_trial);
             timeline.push(phrase_trial);
-
-            // Only ask a followup question 2/3rd of the time.
-            if(Math.random() >= 0.333) {
-                followup_count++;
-                switch (my.question_type) {
-                    case ("yes_no"):
-                        timeline.push(yes_no);
-                        break;
-                    case ("mc1"):
-                        timeline.push(mc1);
-                        break;
-                    case ("mc2"):
-                        timeline.push(mc2);
-                        break;
-                }
-            }
-
-            // Add vividness question after questions 1 and 2...
-            if (k == 0 || k == 1) {
-                timeline.push(vividness);
-                timeline.push(vividness_followup);
-            } else if (k == Math.floor(my.total_scenarios / 2) - 1) {
-                timeline.push(vividness);
-                timeline.push(vividness_followup_halfway);
-            }
-
+            timeline.push(yes_no);
         }
 
         timeline.push(vividness_final);
@@ -371,6 +337,7 @@ var EXPERIENCE_STUDY = (function () {
 
         // Preload images
         // an array of paths to images that need to be loaded
+        /*
         var images = [];
         images.push(my.base_url + "images/finished.png");
         images.push(my.base_url + "images/good-job.png");
@@ -381,9 +348,12 @@ var EXPERIENCE_STUDY = (function () {
                 images.push(my.base_url + "images/s" + s + "/" + i + ".png");
             }
         }
+
         setTimeout(
         jsPsych.pluginAPI.preloadImages(images, function(){ startExperiment(); }),
         10000);
+         */
+        startExperiment();
 
         // Start the experiment.
         function startExperiment() {
