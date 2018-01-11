@@ -111,14 +111,14 @@ var EXPERIENCE_STUDY = (function () {
             show_clickable_nav: true,
             pages: [
                 '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
-                '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i>, not as an outside observer…</p>' +
+                '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i>, not as an outside observer ...</p>' +
                     '<div style="margin:auto"><img src="images/lemon/firstperson.png" style="padding: 20px 20px;"><img style="padding: 20px 20px;" src="images/lemon/secondperson.png"></div>',
                 '<h1>Ok, lets begin:</h1> <h1>Imagine you are holding the lemon in your hand.</h1><p><i>Do you feel it\'s shape and weight in your hand?</i></p>',
                 '<h1>Now you are shining a light on the lemon...</h1><p><i>Do you see the way lumpy texture of the skin?</i></p>',
                 '<h1>Now you scratch the skin with your fingernail...</h1><p><i>Bringing it to your nose, can you smell the fresh zesty juice from the skin?</i></p>',
-                '<h1>Now imagine you cut the lemon in half, and you bring one half of it up for a closer look…</h1><p><i>Notice the shape of the segments, and how the flesh looks</i></p>',
-                '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes…</h1><p><i>Does it sting?</i></p>',
-                '<h1>That was the lemon exercise, you did it!</h1> <p>Don’t worry if you didn’t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
+                '<h1>Now imagine you cut the lemon in half, and you bring one half of it up for a closer look ...</h1><p><i>Notice the shape of the segments, and how the flesh looks</i></p>',
+                '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes...</h1><p><i>Does it sting?</i></p>',
+                '<h1>That was the lemon exercise, you did it!</h1> <p>Don\'t worry if you didn\'t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
                     '<p>Now Please rate your experience on the next page.</p>' +
                     '<img src="images/lemon/lemon.png" style="margin: auto; padding: 20px 20px;">'
             ]
