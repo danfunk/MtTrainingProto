@@ -346,6 +346,10 @@ label.jspsych-survey-multi-choice-text input[type="radio"] {
         white-space: normal;
     }
 
+    .jspsych-html-button-response-button {
+        width: 100%;
+    }
+
     .piIntro img {
         width: 100px;
     }
