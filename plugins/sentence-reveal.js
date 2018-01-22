@@ -109,13 +109,17 @@ jsPsych.plugins["sentence-reveal"] = (function () {
             if (sentence_index < sentences.length - 1) {
                 sentence_index++;
                 reveal_sentence();
+            } else {
+                sentence_index++;
             }
 
-            if (sentence_index == sentences.length - 1) {
+            if (sentence_index == sentences.length) {
                 end_trial();
             } else {
                 show_continue_button();
             }
+
+
         }
 
         // Shows the continue button, but only after a pause based of 10ms for each word
@@ -144,9 +148,8 @@ jsPsych.plugins["sentence-reveal"] = (function () {
                 display_element.html('');
 
             // move on to the next trial, but give folks a few seconds to see the final sentence
-            setTimeout(function () {
-                jsPsych.finishTrial(trial_data);
-            }, 3000);
+            jsPsych.finishTrial(trial_data);
+
         }
 
         // start timing

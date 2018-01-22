@@ -86,23 +86,24 @@ var EXPERIENCE_STUDY = (function () {
                     return (
                         "<div class='piIntro'> " +
                         "<img src='" + my.base_url + "images/compass-blue.png' > " +
-                        "<p>In this part of the program, you will read/listen to a series of very " +
+                        "<p>In this task you will read or listen to a series of " +
                         "short stories. </p> " +
                         "<br clear='all'> " +
                         "<b>For each story:</b> " +
                         "<ul> " +
-                        "<li>Listen or read carefully and <i>really imagine</i> yourself in the situation described. " +
-                        "We will show you how to do this with a fun \"Lemon\" exercise</li>" +
+                        "<li><b>Please</b> <i>imagine</i> yourself in the situation described in each story. " +
+                        "<li>We will show you a demonstration of this with a fun \"Lemon\" exercise, coming up next.</li>" +
                         "<li>Remember, even if the story describes you reacting in a way that you would not usually react, please " +
                         "try to picture yourself responding in the way the story describes. </li> " +
                         "<li>There will be an incomplete word at the end of each paragraph. </li> " +
-                        "<li>Press the key on the keyboard that complete the word.  </li> " +
+                        "<li>Click the letter that completes each word. </li> " +
                         "<li>When you correctly complete the word you will move on to the next screen and be asked a " +
                         "question about the story. </li> " +
                         "</ul> " +
                         "</div>"
                     )
                 },
+
                 on_finish: function(data){ data.stimulus = "introduction" }
             };
 
@@ -112,20 +113,19 @@ var EXPERIENCE_STUDY = (function () {
             pages: [
                 '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
                 '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i> (picture on the left), not as an outside observer (picture on the right) ...</p>' +
-                    '<div style="margin:auto"><img src="images/lemon/firstperson.png" style="padding: 20px 20px 20px 20px;"><img style="padding: 20px 20px;" src="images/lemon/secondperson.png"></div>',
-                '<h1>Ok, lets begin:</h1> <h1>Imagine you are holding the lemon in your hand.</h1>',
-                '<p><i>Do you feel it\'s shape and weight in your hand?</i></p>',
-                '<h1>Now you are shining a light on the lemon...</h1>',
-                '<p><i>Do you see the way lumpy texture of the skin?</i></p>',
-                '<h1>Now you scratch the skin with your fingernail...</h1>',
-                '<p><i>Bringing it to your nose, can you smell the fresh zesty juice from the skin?</i></p>',
-                '<h1>Now imagine you cut the lemon in half, and you bring one half of it up for a closer look ...</h1>',
-                '<p><i>Notice the shape of the segments, and how the flesh looks</i></p>',
-                '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes...</h1>',
-                '<p><i>Does it sting?</i></p>',
-                '<h1>That was the lemon exercise, you did it!</h1> <p>Don\'t worry if you didn\'t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
-                    '<p>Now Please rate your experience on the next page.</p>' +
-                    '<img src="images/lemon/lemon.png" style="margin: auto; padding: 20px 20px 20px 20px;">'
+                    '<div style="display: flex; justify-content: center;"><img src="images/lemon/firstperson.png" style="padding: 20px 20px 20px 20px;"><img src="images/lemon/secondperson.png" style="padding: 20px 20px 20px 20px;"></div>',
+                '<h1>Ok, lets begin:</h1> <h1>Imagine you are holding the lemon in your right hand, and you can feel its shape and its weight.</h1>' +
+                '<p><i>(Please take a few seconds to imagine this)</i></p>',
+                '<h1>Now imagine you are shining a light on the lemon, and you can see the waxy and lumpy texture of the yellow skin</h1>' +
+                '<p><i>(Please take a few seconds to imagine this)</i></p>',
+                '<h1>Now imagine that you scratch the skin with your fingernail, then you bring the lemon up to your nose, you can smell the fresh zesty juice from the skin.</h1>' +
+                '<p><i>(Please take a few seconds to imagine this)</i></p>',
+                '<h1>Now imagine that you cut the lemon in half, and you bring one half of it up for a closer look. You can see the juicy flesh in the shape of segments that look like a wagon wheel.</h1>' +
+                '<p><i>(Please take a few seconds to imagine this)</i></p>',
+                '<h1>Now imagine that you squeeze the lemon and some of the juice squirts right into your eyes, and it is really stinging, making your eyes water.</h1>' +
+                '<p><i>(Please take a few seconds to imagine this)</i></p>',
+                '<h1>That was the lemon exercise!</h1> <p><i>Don\'t worry if you didn\'t experience all of the sensations strongly, this is completely normal.</i></p>' +
+                    '<img src="images/lemon/lemon_2.png" style="margin: auto; padding: 20px 20px 20px 20px;">'
             ]
         };
 
@@ -157,25 +157,21 @@ var EXPERIENCE_STUDY = (function () {
 
         /* create experiment timeline array */
         var timeline = [];
-        //timeline.push(lemon_exercise);
-        //timeline.push(introduction);
-        //timeline.push(lemon_exercise);
-        //timeline.push(vividness);
+        timeline.push(introduction);
+        timeline.push(lemon_exercise);
 
         // Randomize the scenarios
         // scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
 
         // Scenarios are in order, groups by three types of Auditory (no immersion, image before, and image sound before)
         // followed by three types of Visual.   We want to randomize the occurrence of these 6 different types
-        var starts = [1,4,8,12,16,20]
+        var starts = [0,4,8,12,16,20];
         shuffleArray(starts);
         var new_scenarios = [];
         for (var si = 0; si < starts.length; si++) {
             new_scenarios = new_scenarios.concat(scenarios.slice(starts[si],starts[si]+4))
         }
-        //scenarios = new_scenarios;
-
-        scenarios = scenarios.slice(8,12)
+        scenarios = new_scenarios;
 
         // Loop through the time-line creating scenarios
         var positive = true;
@@ -184,6 +180,7 @@ var EXPERIENCE_STUDY = (function () {
             var paragraph;
             var phrase;
             var immersion;
+            var title;
             var yes_no_correct;
             var mc1_correct;
             var mc2_correct;
@@ -193,6 +190,7 @@ var EXPERIENCE_STUDY = (function () {
             scenario = scenarios[k]['Scenario'];
             format = scenarios[k]['Format'];
             immersion = scenarios[k]['Immersion'];
+            title = scenarios[k]['Title'];
             positive = true;
 
             if (positive) {
@@ -211,7 +209,7 @@ var EXPERIENCE_STUDY = (function () {
             if(immersion === "picture") {
                 immersion_trial = {
                     type: 'html-button-response',
-                    stimulus: "<img class='sound_image' src='images/" + scenario + ".jpg'>",
+                    stimulus: "<h1 class='title'>Story: " + title + "</h1><img class='sound_image' src='images/" + scenario + ".jpg'>",
                     trial_duration: 5000 // Show trial for 5 seconds
                 }
             } else if (immersion === "picture_sound") {
@@ -219,7 +217,13 @@ var EXPERIENCE_STUDY = (function () {
                     type: 'audio-button-response',
                     stimulus: 'sounds/background/' + scenario + '.mp3',
                     trial_duration: 5000, // Show trial for 5 seconds
-                    prompt: "<img class='sound_image' src='images/" + scenario + ".jpg'>"
+                    prompt: "<h1 class='title'>Story: " + title + "</h1><img class='sound_image' src='images/" + scenario + ".jpg'>"
+                }
+            } else {
+               immersion_trial = {
+                    type: 'html-button-response',
+                    stimulus: "<h1 class='title'>Story: " + title + "</h1>",
+                    trial_duration: 5000
                 }
             }
 
@@ -230,7 +234,7 @@ var EXPERIENCE_STUDY = (function () {
                     type: 'audio-button-response',
                     stimulus: 'sounds/' + scenario + '.mp3',
                     trial_ends_after_audio: true,
-                    prompt: "<img class='sound_image' src='images/" + scenario + ".jpg'>"
+                    prompt: '<p>Please listen ...</p>'
                 };
             } else {
                 main_trial = {
@@ -266,22 +270,10 @@ var EXPERIENCE_STUDY = (function () {
             var vividness_followup = {
                 type: 'html-button-response',
                 choices: ['Continue'],
-                stimulus: function () {
-                    if (vivid_response) {
-                        return (
-                            "<div class='vividness_followup'>" +
+                stimulus: "<div class='vividness_followup'>" +
                             "<h1>Thanks. It's great you're really using your imagination!</h1>" +
-                            "<img src='" + my.base_url + "images/lemon/lemon.png'/>" +
-                            "</div>"
-                        )
-                    } return (
-                        "<div class='vividness_followup'>" +
-                        "<h1>Thanks. Really try to use your imagination!</h1>" +
-                        "<img src='" + my.base_url + "images/lemon/lemon.png'/>" +
-                        "</div>"
-                    )
-                },
-
+                            "<img src='" + my.base_url + "images/lemon/lemon_" + (k/4) + ".png'/>" +
+                            "</div>",
                 cont_btn: "continue",
                 on_finish: function (trial_data) {
                     if(vivid_response) {
@@ -293,69 +285,56 @@ var EXPERIENCE_STUDY = (function () {
             };
 
 
-            var followup_options = ["Not at all", "Moderately", "Totally"];
             var multi_choice_trial_1  = {
-                type: 'html-slider-response',
-                labels: followup_options,
-                min: 1,
-                max: 5,
-                start: 3,
-                stimulus: '<h1>How easy was it to imagine the scenario?</h1>',
+                type: 'html-button-response',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                stimulus: '<h1>How easy was it to <b>imagine</b> the scenario?</h1>',
             };
-
-            var followup_options = ["1: Not at all", "2", "3: Moderately", "4", "5: Totally"];
             var multi_choice_trial_2  = {
                 type: 'html-button-response',
-                choices: followup_options,
-                stimulus: '<h1>How vividly did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
             };
-
             var multi_choice_trial_3  = {
                 type: 'html-button-response',
                 choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>How easy was it to follow the story?</h1>',
+                stimulus: '<h1>How easy was it to <b>follow</b> the story?</h1>'
             };
-
-            /*
-            var multi_choice_trial_1 = {
-                type: 'survey-multi-choice',
-                data: {'scenario': scenario},
-                questions: [
-                    {prompt: "How easy was it to imagine the scenario?", options: followup_options, required:true, horizontal: true},
-                    {prompt: "How vividly did you imagine the scenario (as if you were really there and experiencing it first hand)?", options: followup_options, required:true, horizontal: true},
-                    {prompt: "How easy was it to follow the story?", options: followup_options, required:true, horizontal: true},
-                ]
+            var multi_choice_trial_4  = {
+                type: 'html-button-response',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                stimulus: '<h1>To what extent did this story\'s ending make you see this situation in <b>a new way</b>?</h1>'
             };
-            var multi_choice_trial_2 = {
-                type: 'survey-multi-choice',
-                data: {'scenario': scenario},
-                questions: [
-                    {prompt: "To what extent did this story's ending make you see this situation in a new way?", options: followup_options, required:true, horizontal: true},
-                    {prompt: "To what extend did this scenario's ending feel possible, like it could really happen?", options: followup_options, required:true, horizontal: true},
-                    {prompt: "To what extent did you feel you could relate to the situations that were presented?", options: followup_options, required:true, horizontal: true}
-                ]
+            var multi_choice_trial_5  = {
+                type: 'html-button-response',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                stimulus: '<h1>To what extend did this scenario\'s ending feel <b>possible</b>, like it could really happen?</h1>'
             };
-             */
+            var multi_choice_trial_6  = {
+                type: 'html-button-response',
+                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                stimulus: '<h1>To what extent did you feel you could <b>relate</b> to the situations that were presented?</h1>'
+            };
 
 
             // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
             // *********************************************
 
-            /*
             if(k%4 === 0 && k !== 0) {
-                timeline.push(vividness)
                 timeline.push(vividness_followup)
             }
-            //timeline.push(paragraph_trial);
-            if(immersion_trial !== null) {
-                timeline.push(immersion_trial);
-            }
+
+            timeline.push(immersion_trial);
             timeline.push(main_trial);
             timeline.push(phrase_trial);
-*/
+
             timeline.push(multi_choice_trial_1);
             timeline.push(multi_choice_trial_2);
             timeline.push(multi_choice_trial_3);
+            timeline.push(multi_choice_trial_4);
+            timeline.push(multi_choice_trial_5);
+            timeline.push(multi_choice_trial_6);
+
         }
         timeline.push(rank_experiences);
 

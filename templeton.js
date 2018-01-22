@@ -175,7 +175,7 @@ var TEMPLETON_MODULE = (function () {
                 '<h1>Now you suddenly squeeze the lemon and juice squirts into your eyes…</h1><p><i>Does it sting?</i></p>',
                 '<h1>That was the lemon exercise, you did it!</h1> <p>Don’t worry if you didn’t experience all of the sensations strongly, this is completely normal and tends to differ between people.</p>' +
                     '<p>Now Please rate your experience on the next page.</p>' +
-                    '<img src="images/lemon/lemon.png" style="margin: auto; padding: 20px 20px;">'
+                    '<img src="images/lemon/lemon_2.png" style="margin: auto; padding: 20px 20px;">'
             ]
         };
 
