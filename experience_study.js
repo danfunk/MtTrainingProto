@@ -303,10 +303,14 @@ var EXPERIENCE_STUDY = (function () {
                         "<h1>Remember, imagine the scenario as if you are experiencing it through your own eyes.</h1>"
                     break;
                 case 8:
+                    stimulus = "<h1>Nice Work.</h1>" +
+                        "<h1>Take time to visualize each situation.</h1>"
+                    break;
+                case 12:
                     stimulus = "<h1>Good job.</h1>" +
                         "<h1>Remember, try to imagine the stories as vividly as you can.</h1>"
                     break;
-                case 12:
+                case 16:
                     stimulus = "<h1>You're doing great. </h1>" +
                         "<h1>Keep focusing on the stories and imagine them from your own eyes.</h1>"
                     break;
