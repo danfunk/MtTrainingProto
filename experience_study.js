@@ -146,12 +146,12 @@ var EXPERIENCE_STUDY = (function () {
             "for how engaging/fun it was to imagine each type (1=most engaging/fun; 6 = least engaging/fun) :",
             type: 'survey-multi-choice',
             questions: [
-                {prompt: "<i>Reading</i> the story only", options: rank_options, required:true, horizontal: true},
-                {prompt: "<i>Listening</i> to the story only", options: rank_options, required:true, horizontal: true},
-                {prompt: "Seeing a picture + <i>reading</i> the story", options: rank_options, required:true, horizontal: true},
-                {prompt: "Seeing a picture + <i>listening</i> to the story", options: rank_options, required:true, horizontal: true},
-                {prompt: "Seeing a picture + hearing background noise + <i>reading</i> the story", options: rank_options, required:true, horizontal: true},
-                {prompt: "Seeing a picture + hearing background noise + <i>listening</i> to the story", options: rank_options, required:true, horizontal: true},
+                {prompt: "<b>READING</b> the story only", options: rank_options, required:true, horizontal: true},
+                {prompt: "<b>LISTENING</b> to the story only", options: rank_options, required:true, horizontal: true},
+                {prompt: "Seeing a picture + <b>READING</b> the story", options: rank_options, required:true, horizontal: true},
+                {prompt: "Seeing a picture + <b>LISTENING</b> to the story", options: rank_options, required:true, horizontal: true},
+                {prompt: "Seeing a picture + hearing background noise + <b>READING</b> the story", options: rank_options, required:true, horizontal: true},
+                {prompt: "Seeing a picture + hearing background noise + <b>LISTENING</b> to the story", options: rank_options, required:true, horizontal: true},
             ]
         };
 
@@ -266,56 +266,63 @@ var EXPERIENCE_STUDY = (function () {
                 }
             };
 
-            // Vivid Follow up - changes based on response.
-            var vividness_followup = {
-                type: 'html-button-response',
-                choices: ['Continue'],
-                stimulus: "<div class='vividness_followup'>" +
-                            "<h1>Thanks. It's great you're really using your imagination!</h1>" +
-                            "<img src='" + my.base_url + "images/lemon/lemon_" + (k/4) + ".png'/>" +
-                            "</div>",
-                cont_btn: "continue",
-                on_finish: function (trial_data) {
-                    if(vivid_response) {
-                        trial_data.stimulus = "Good Job"
-                    } else {
-                        trial_data.stimulus = "Use Imagination"
-                    }
-                }
-            };
-
+            var choices = ['1. Not at all', '2. Somewhat', '3. Moderately', '4. Very', '5. Totally']
 
             var multi_choice_trial_1  = {
                 type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>How easy was it to <b>imagine</b> the scenario?</h1>',
+                choices: choices,
+                stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
             };
             var multi_choice_trial_2  = {
                 type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
+                choices: choices,
+                stimulus: '<h1>How easy was it to <b>follow</b> the story?</h1>'
             };
             var multi_choice_trial_3  = {
                 type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>How easy was it to <b>follow</b> the story?</h1>'
+                choices: choices,
+                stimulus: '<h1>To what extent did this story\'s ending make you see this situation in <b>a new way</b>?</h1>'
             };
             var multi_choice_trial_4  = {
                 type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>To what extent did this story\'s ending make you see this situation in <b>a new way</b>?</h1>'
+                choices: choices,
+                stimulus: '<h1>To what extend did this scenario\'s ending feel <b>possible</b>, like it could really happen?</h1>'
             };
             var multi_choice_trial_5  = {
                 type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
-                stimulus: '<h1>To what extend did this scenario\'s ending feel <b>possible</b>, like it could really happen?</h1>'
-            };
-            var multi_choice_trial_6  = {
-                type: 'html-button-response',
-                choices: ['Not at all', 'Somewhat', 'Moderately', 'Very', 'Totally'],
+                choices: choices,
                 stimulus: '<h1>To what extent did you feel you could <b>relate</b> to the situations that were presented?</h1>'
             };
 
+
+            // Vivid Follow up - changes based on response.
+            var stimulus;
+            switch(k) {
+                case 4:
+                    stimulus = "<h1>Well done.</h1>" +
+                        "<h1>Remember, imagine the scenario as if you are experiencing it through your own eyes.</h1>"
+                    break;
+                case 8:
+                    stimulus = "<h1>Good job.</h1>" +
+                        "<h1>Remember, try to imagine the stories as vividly as you can.</h1>"
+                    break;
+                case 12:
+                    stimulus = "<h1>You’re doing great. </h1>" +
+                        "<h1>Keep focusing on the stories and imagine them from your own eyes.</h1>"
+                    break;
+                default:
+                    stimulus = "<h1>Almost there. </h1>" +
+                        "<h1>Keep imagining as vividly as you can. </h1>"
+                    break;
+            }
+            var vividness_followup = {
+                    type: 'html-button-response',
+                    choices: ['Continue'],
+                    stimulus: "<div class='vividness_followup'>" +
+                    stimulus +
+                    "<img src='" + my.base_url + "images/lemon/lemon_" + (k/4) + ".png'/>" +
+                    "</div>"
+            };
 
             // BUILD THE TIMELINE FROM THE COMPONENTS ABOVE.
             // *********************************************
@@ -333,7 +340,6 @@ var EXPERIENCE_STUDY = (function () {
             timeline.push(multi_choice_trial_3);
             timeline.push(multi_choice_trial_4);
             timeline.push(multi_choice_trial_5);
-            timeline.push(multi_choice_trial_6);
 
         }
         timeline.push(rank_experiences);
