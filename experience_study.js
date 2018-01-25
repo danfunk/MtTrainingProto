@@ -140,10 +140,10 @@ var EXPERIENCE_STUDY = (function () {
             }
         };
 
-        var rank_options = ["1", "2", "3", "4", "5", "6"];
+        var rank_options = ["1", "2", "3", "4", "5"];
         var rank_experiences = {
-            preamble: "In this task you encountered several types of scenarios. Please rank them " +
-            "for how engaging/fun it was to imagine each type (1=most engaging/fun; 6 = least engaging/fun) :",
+            preamble: "In this task you encountered several types of scenarios. Please rate them " +
+            "for how engaging/fun it was to imagine each type (1 = least engaging/fun; 5 = most engaging/fun) :",
             type: 'survey-multi-choice',
             questions: [
                 {prompt: "<b>READING</b> the story only", options: rank_options, required:true, horizontal: true},
@@ -155,8 +155,11 @@ var EXPERIENCE_STUDY = (function () {
             ]
         };
 
+        
+
         /* create experiment timeline array */
         var timeline = [];
+        timeline.push(rank_experiences);
         timeline.push(introduction);
         timeline.push(lemon_exercise);
 
