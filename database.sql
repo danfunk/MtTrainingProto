@@ -9,5 +9,6 @@ create table `data` (
   internal_node_id VARCHAR(255),
   correct BIT(1),
   format VARCHAR(255),
-  immersion VARCHAR(255)
+  immersion VARCHAR(255),
+  scenario VARCHAR(255)
 )
