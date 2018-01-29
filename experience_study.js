@@ -60,6 +60,10 @@ var EXPERIENCE_STUDY = (function () {
     // DISPLAY SCORE AND PROGRESS
     // ***************
 
+    function updateBanner(content) {
+        document.getElementById('banner').textContent = content;
+    }
+
     function updateScore() {
         document.getElementById('score').textContent = "Score: " + (score_letters + score_questions);
     }
@@ -113,7 +117,7 @@ var EXPERIENCE_STUDY = (function () {
             type: 'instructions',
             show_clickable_nav: true,
             pages: [
-                '<h1>Before we begin, we’d like to walk you through a brief imagination exercise.</h1>',
+                '<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>',
                 '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
                 '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i> (picture on the left), not as an outside observer (picture on the right) ...</p>' +
                     '<div style="display: flex; justify-content: center;"><img src="images/lemon/firstperson.png" style="padding: 20px 20px 20px 20px;"><img src="images/lemon/secondperson.png" style="padding: 20px 20px 20px 20px;"></div>',
@@ -162,8 +166,8 @@ var EXPERIENCE_STUDY = (function () {
 
         /* create experiment timeline array */
         var timeline = [];
-        timeline.push(lemon_exercise);
-        timeline.push(introduction);
+        //timeline.push(lemon_exercise);
+        //timeline.push(introduction);
 
         // Randomize the scenarios
         // scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
@@ -210,11 +214,14 @@ var EXPERIENCE_STUDY = (function () {
              ***********************************************/
 
             var introduction_text = "For the next couple of stories, you will ";
+            var banner_text = "";
             switch(immersion) {
                 case("picture"):
+                    banner_text = "Picture + ";
                     introduction_text += "see a PICTURE related to the story before you ";
                     break;
                 case("picture_sound"):
+                    banner_text = "Picture and Sound + ";
                     introduction_text += "see a PICTURE and listen to a background sound before you ";
                     break;
                 default:
@@ -222,9 +229,11 @@ var EXPERIENCE_STUDY = (function () {
             }
             switch(format) {
                 case("Auditory"):
+                    banner_text += "Listening to Story";
                     introduction_text += "<b>LISTEN</b> to the story. ";
                     break;
                 default:
+                    banner_text += "Reading the Story";
                     introduction_text += "<b>READ</b> the story. ";
             }
 
@@ -232,12 +241,15 @@ var EXPERIENCE_STUDY = (function () {
             var section_intro = {
                 type: 'html-button-response',
                 choices: ['Continue'],
+                my_banner_text:  banner_text,
                 stimulus:
                         "<div class='piIntro'> " +
                         "<img src='" + my.base_url + "images/compass-blue.png' > " +
                         "<p>" + introduction_text + "</p>" +
                         "</div>",
-                on_finish: function(data){ data.stimulus = "introduction" }
+                on_finish: function(data){ data.stimulus = "introduction";
+                    updateBanner(this.my_banner_text)
+                }
             };
 
 
@@ -372,11 +384,8 @@ var EXPERIENCE_STUDY = (function () {
                 timeline.push(vividness_followup)
             }
 
-            console.log("K is " + k);
             if(k%4 === 0) {
-                console.log("Adding a section intro here.");
-                console.log("Introduction Text is:" + introduction_text);
-                timeline.push(section_intro)
+                timeline.push(section_intro);
             }
 
             timeline.push(immersion_trial);
@@ -389,22 +398,20 @@ var EXPERIENCE_STUDY = (function () {
             timeline.push(multi_choice_trial_3);
             timeline.push(multi_choice_trial_4);
             timeline.push(multi_choice_trial_5);
-
         }
         timeline.push(rank_experiences);
 
-        function saveData(data, callback){
-
-            $.ajax({
-                type:'post',
-                contentType: 'application/json',
-                cache: false,
-                url: my.post_url, // this is the path to the above PHP script
-                data: data,
-                success: callback,
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Status: " + textStatus); alert("Error: " + errorThrown);
-                }                });
+        function saveData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'write_data.php'); // change 'write_data.php' to point to php script.
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function() {
+                if(xhr.status == 200){
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(response.success);
+                }
+            };
+            xhr.send(jsPsych.data.get().json());
         }
 
         function redirect() {
@@ -446,6 +453,7 @@ var EXPERIENCE_STUDY = (function () {
                 }
             });
         }
+
 
     }
 

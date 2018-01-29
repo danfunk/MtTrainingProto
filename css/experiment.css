@@ -79,7 +79,8 @@ div.piPlayerHeader {
     }
 
     h1 {
-        font-size: 22px;
+        font-size: 18px;
+        line-height: 1.2em;
     }
 }
 
@@ -118,6 +119,14 @@ div.piPlayerHeader {
     margin-left: 10px;
 }
 
+#banner {
+    display: block;
+    font-weight: bold;
+    width: 100%;
+    text-align: right;
+    padding-right: 20px;
+}
+
 div.vividness_followup {
     text-align: center;
 }
@@ -138,6 +147,10 @@ img.sound_image {
     max-width: 100%;
     max-height: 400px;
     margin: auto;
+}
+
+#jspsych-survey-multi-choice-form .jspsych-survey-multi-choice-question {
+ text-align: center;
 }
 
 /*
