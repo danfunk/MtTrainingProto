@@ -259,20 +259,23 @@ var EXPERIENCE_STUDY = (function () {
                 immersion_trial = {
                     type: 'html-button-response',
                     stimulus: "<h1 class='title'>Story: " + title + "</h1><img class='sound_image' src='images/" + scenario + ".jpg'>",
-                    trial_duration: 5000 // Show trial for 5 seconds
+                    trial_duration: 5000, // Show trial for 5 seconds
+                    data: { immersion: immersion, format: format }
                 }
             } else if (immersion === "picture_sound") {
                 immersion_trial = {
                     type: 'audio-button-response',
                     stimulus: 'sounds/background/' + scenario + '.mp3',
                     trial_duration: 5000, // Show trial for 5 seconds
-                    prompt: "<h1 class='title'>Story: " + title + "</h1><img class='sound_image' src='images/" + scenario + ".jpg'>"
+                    prompt: "<h1 class='title'>Story: " + title + "</h1><img class='sound_image' src='images/" + scenario + ".jpg'>",
+                    data: { immersion: immersion, format: format }
                 }
             } else {
                immersion_trial = {
                     type: 'html-button-response',
                     stimulus: "<h1 class='title'>Story: " + title + "</h1>",
-                    trial_duration: 5000
+                    trial_duration: 5000,
+                   data: { immersion: immersion, format: format }
                 }
             }
 
@@ -283,12 +286,14 @@ var EXPERIENCE_STUDY = (function () {
                     type: 'audio-button-response',
                     stimulus: 'sounds/' + scenario + '.mp3',
                     trial_ends_after_audio: true,
-                    prompt: '<p>Please listen ...</p>'
+                    prompt: '<p>Please listen ...</p>',
+                    data: { immersion: immersion, format: format }
                 };
             } else {
                 main_trial = {
                     type: 'sentence-reveal',
-                    paragraph: paragraph
+                    paragraph: paragraph,
+                    data: { immersion: immersion, format: format }
                 };
             }
 
@@ -296,6 +301,7 @@ var EXPERIENCE_STUDY = (function () {
                 type: 'missing-letters',
                 phrase: phrase,
                 letters_to_remove: my.letters_to_remove,
+                data: { immersion: immersion, format: format },
                 on_finish: function (trial_data) {
                     if (trial_data.correct) score_letters++;
                     updateScore();
@@ -321,26 +327,31 @@ var EXPERIENCE_STUDY = (function () {
                 type: 'html-button-response',
                 choices: choices,
                 stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
+                data: { immersion: immersion, format: format }
             };
             var multi_choice_trial_2  = {
                 type: 'html-button-response',
                 choices: choices,
-                stimulus: '<h1>How easy was it to <b>follow</b> the story?</h1>'
+                stimulus: '<h1>How easy was it to <b>follow</b> the story?</h1>',
+                data: { immersion: immersion, format: format }
             };
             var multi_choice_trial_3  = {
                 type: 'html-button-response',
                 choices: choices,
-                stimulus: '<h1>To what extent did this story\'s ending make you see this situation in <b>a new way</b>?</h1>'
+                stimulus: '<h1>To what extent did this story\'s ending make you see this situation in <b>a new way</b>?</h1>',
+                data: { immersion: immersion, format: format }
             };
             var multi_choice_trial_4  = {
                 type: 'html-button-response',
                 choices: choices,
-                stimulus: '<h1>To what extent did this scenario\'s ending feel <b>possible</b>, like it could really happen?</h1>'
+                stimulus: '<h1>To what extent did this scenario\'s ending feel <b>possible</b>, like it could really happen?</h1>',
+                data: { immersion: immersion, format: format }
             };
             var multi_choice_trial_5  = {
                 type: 'html-button-response',
                 choices: choices,
-                stimulus: '<h1>To what extent did you feel you could <b>relate</b> to the situations that were presented?</h1>'
+                stimulus: '<h1>To what extent did you feel you could <b>relate</b> to the situations that were presented?</h1>',
+                data: { immersion: immersion, format: format }
             };
 
 
@@ -349,15 +360,15 @@ var EXPERIENCE_STUDY = (function () {
             switch(k) {
                 case 4:
                     stimulus = "<h1>Well done.</h1>" +
-                        "<h1>Remember, imagine the scenario as if you are experiencing it through your own eyes.</h1>"
+                        "<h1>Remember, imagine the scenario as if you are experiencing it through your own eyes.</h1>";
                     break;
                 case 8:
                     stimulus = "<h1>Nice Work.</h1>" +
-                        "<h1>Take time to visualize each situation.</h1>"
+                        "<h1>Take time to visualize each situation.</h1>";
                     break;
                 case 12:
                     stimulus = "<h1>Good job.</h1>" +
-                        "<h1>Remember, try to imagine the stories as vividly as you can.</h1>"
+                        "<h1>Remember, try to imagine the stories as vividly as you can.</h1>";
                     break;
                 case 16:
                     stimulus = "<h1>You're doing great. </h1>" +
