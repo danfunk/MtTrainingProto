@@ -409,6 +409,7 @@ var EXPERIENCE_STUDY = (function () {
             timeline.push(multi_choice_trial_3);
             timeline.push(multi_choice_trial_4);
             timeline.push(multi_choice_trial_5);
+	    break;
         }
         timeline.push(rank_experiences);
 
@@ -460,8 +461,10 @@ var EXPERIENCE_STUDY = (function () {
                     jsPsych.data.addProperties({
                         condition: my.condition
                     });
-                    saveData(jsPsych.data.dataAsJSON(), redirect)
-                }
+                    saveData();
+		    
+
+		}
             });
         }
 
