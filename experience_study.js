@@ -166,8 +166,8 @@ var EXPERIENCE_STUDY = (function () {
 
         /* create experiment timeline array */
         var timeline = [];
-        //timeline.push(lemon_exercise);
-        //timeline.push(introduction);
+        timeline.push(lemon_exercise);
+        timeline.push(introduction);
 
         // Randomize the scenarios
         // scenarios = jsPsych.randomization.sampleWithoutReplacement(scenarios, my.total_scenarios);
