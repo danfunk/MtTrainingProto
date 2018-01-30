@@ -517,6 +517,9 @@ var EXPERIENCE_STUDY = (function () {
                         }
                     };
                     xhr.send(jsPsych.data.get().json());
+                    jsPsych.turk.submitToTurk({
+                        code: turkInfo.workerId
+                    });
                 }
 
                 function redirect() {
