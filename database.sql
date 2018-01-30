@@ -10,5 +10,10 @@ create table `data` (
   correct BIT(1),
   format VARCHAR(255),
   immersion VARCHAR(255),
-  scenario VARCHAR(255)
+  scenario VARCHAR(255),
+  responses longtext,
+  subject VARCHAR(255),
+  turk_work_id VARCHAR(255),
+  turk_hit_id VARCHAR(255),
+  turk_assignment_id VARCHAR(255)
 )
