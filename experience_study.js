@@ -104,7 +104,7 @@ var EXPERIENCE_STUDY = (function () {
                             return (
                                 "<div class='piIntro'> " +
                                 "<img src='" + my.base_url + "images/compass-blue.png' > " +
-                                "<p> In this study, you will see a set of short stories. All stories will start with the story’s title, so you know what the story is about. " +
+                                "<p> In this study, you will see a set of short stories. All stories will start with the story's title, so you know what the story is about. " +
                                 "The stories will be presented in different formats, somtimes including pictures and sounds.</p> " +
                                 "<br clear='all'> " +
                                 "<b>For each story:</b> " +
@@ -184,7 +184,7 @@ var EXPERIENCE_STUDY = (function () {
                     type: 'instructions',
                     show_clickable_nav: true,
                     pages: [
-                        '<h1>In this task you will read or listen to a series of short stories, and we will ask you to imagine yourself in the situation described in each story.</h1>' +
+                        '<h1>In this task you will read or listen to a series of short stories. We will ask you to imagine yourself in the situation described in each story.</h1>' +
                         "<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>",
                         '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
                         '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i> (picture on the left), not as an outside observer (picture on the right) ...</p>' +
