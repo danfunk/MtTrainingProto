@@ -183,7 +183,7 @@ var EXPERIENCE_STUDY = (function () {
                 var lemon_exercise = {
                     type: 'instructions',
                     show_clickable_nav: true,
-                    pages: [
+                    pages: [ "<div class='details'>" +
                         '<h1>In this task you will read or listen to a series of short stories. We will ask you to imagine yourself in the situation described in each story.</h1>' +
                         "<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>",
                         '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
@@ -200,7 +200,7 @@ var EXPERIENCE_STUDY = (function () {
                         '<h1>Now imagine that you squeeze the lemon and some of the juice squirts right into your eyes, and it is really stinging, making your eyes water.</h1>' +
                         '<p><i>(Please take a few seconds to imagine this)</i></p>',
                         '<h1>That was the lemon exercise!</h1> <p><i>Don\'t worry if you didn\'t experience all of the sensations strongly, this is completely normal.</i></p>' +
-                        '<img src="images/lemon/lemon_2.png" style="margin: auto; padding: 20px 20px 20px 20px;">'
+                        '<img src="images/lemon/lemon_2.png" style="margin: auto; padding: 20px 20px 20px 20px;"></div>'
                     ]
                 };
 
