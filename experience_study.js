@@ -11,21 +11,27 @@ var EXPERIENCE_STUDY = (function () {
             my.redirect_url = "/jspsych/continue";
             my.sessionIndex = 1;
 
-
             var turkInfo = jsPsych.turk.turkInfo();
 
             // generate a random subject ID with 15 characters
             var subject_id = jsPsych.randomization.randomID(15);
 
+            function getParameterByName(name) {
+                url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
             // record the condition assignment in the jsPsych data
             // this values are added to every trial to track participation.
             jsPsych.data.addProperties({
                 subject: subject_id,
-                turk_work_id: turkInfo.workerId,
-                turk_hit_id: turkInfo.hitId,
-                turk_assignment_id: turkInfo.assignmentId
+                turk_work_id: getParameterByName('turk_work_id')
             });
-
 
             // This score is incremented for every correct answer and displayed
             // to the user.
@@ -178,14 +184,26 @@ var EXPERIENCE_STUDY = (function () {
                     "addition, if you have any concerns about any aspect of the experiment, you may contact Tonya R. Moon, Ph.D., " +
                     "Chair, Institutional Review Board for the Social and Behavioral Sciences. Email: irbsbshelp@virginia.edu  " +
                     "Website: www.virginia.edu/vprgs/irb</p></div>"
+                };
+
+                var final = {
+                    type: 'html-button-response',
+                        choices: ['All Done'],
+                        stimulus: function () {
+                        return (
+                            "<h1>You are all done! </h1>" +
+                            "<h1>Please enter the following code in Mechanical Turk to show you have completed the study: </h1>" +
+                            "<h1>" + subject_id + "</h1>"
+                        )
+                    }
                 }
 
                 var lemon_exercise = {
                     type: 'instructions',
                     show_clickable_nav: true,
-                    pages: [ "<div class='details'>" +
-                        '<h1>In this task you will read or listen to a series of short stories. We will ask you to imagine yourself in the situation described in each story.</h1>' +
-                        "<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>",
+                    pages: ["<div class='details'>" +
+                    '<h1>In this task you will read or listen to a series of short stories. We will ask you to imagine yourself in the situation described in each story.</h1>' +
+                    "<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>",
                         '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
                         '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i> (picture on the left), not as an outside observer (picture on the right) ...</p>' +
                         '<div style="display: flex; justify-content: center;"><img src="images/lemon/firstperson.png" style="padding: 20px 20px 20px 20px;"><img src="images/lemon/secondperson.png" style="padding: 20px 20px 20px 20px;"></div>',
@@ -225,7 +243,8 @@ var EXPERIENCE_STUDY = (function () {
                             prompt: "<b>READING</b> the story only",
                             options: rank_options,
                             required: true,
-                            horizontal: true},
+                            horizontal: true
+                        },
                         {
                             prompt: "Seeing a <b>PICTURE</b> + <b>READING</b> the story",
                             options: rank_options,
@@ -262,6 +281,7 @@ var EXPERIENCE_STUDY = (function () {
 
                 /* create experiment timeline array */
                 var timeline = [];
+                timeline.push(final);
                 timeline.push(consent);
                 timeline.push(lemon_exercise);
                 timeline.push(introduction);
