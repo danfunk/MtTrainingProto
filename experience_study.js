@@ -1,7 +1,7 @@
 var EXPERIENCE_STUDY = (function () {
             var my = {};
 
-            my.letters_to_remove = 2; // number of missing letters to complete in the term.
+            my.letters_to_remove = 2; // number of missituationrs to complete in the term.
             my.total_scenarios = 24;  // How many scenarios should be randomly selected out of the full set?
             my.block_size = 4; // Number of items in block
             my.question_type = "yes_no";  // Can be yes_no, mc1, or mc2.
@@ -104,8 +104,8 @@ var EXPERIENCE_STUDY = (function () {
                             return (
                                 "<div class='piIntro'> " +
                                 "<img src='" + my.base_url + "images/compass-blue.png' > " +
-                                "<p>In this task you will read or listen to a series of " +
-                                "short stories. </p> " +
+                                "<p> In this study, you will see a set of short stories. All stories will start with the story’s title, so you know what the story is about. " +
+                                "The stories will be presented in different formats, somtimes including pictures and sounds.</p> " +
                                 "<br clear='all'> " +
                                 "<b>For each story:</b> " +
                                 "<ul> " +
@@ -117,6 +117,7 @@ var EXPERIENCE_STUDY = (function () {
                                 "<li>When you correctly complete the word you will move on to the next screen and be asked a " +
                                 "question about the story. </li> " +
                                 "</ul> " +
+                                "<p><b>Before we start, please make sure your sound volume is turned on.</b></p>" +
                                 "</div>"
                             )
                         },
@@ -183,7 +184,8 @@ var EXPERIENCE_STUDY = (function () {
                     type: 'instructions',
                     show_clickable_nav: true,
                     pages: [
-                        '<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>',
+                        '<h1>In this task you will read or listen to a series of short stories, and we will ask you to imagine yourself in the situation described in each story.</h1>' +
+                        "<h1>Before we begin, we\'d like to walk you through a brief imagination exercise.</h1>",
                         '<h1>Welcome to the "Lemon" exercise.</h1> <p>The purpose of this quick exercise is to demonstrate what imagination-based thinking is.</p><p>You will go through what imagining seeing, touching, and smelling a lemon is like.</p><p>Please imagine it as if you are really experiencing it.</p>',
                         '<h1>First-person perspective</h1> <p>In this exercise, and throughout the training program, please remember to imagine what is happening through <i>your own eyes</i> (picture on the left), not as an outside observer (picture on the right) ...</p>' +
                         '<div style="display: flex; justify-content: center;"><img src="images/lemon/firstperson.png" style="padding: 20px 20px 20px 20px;"><img src="images/lemon/secondperson.png" style="padding: 20px 20px 20px 20px;"></div>',
@@ -219,7 +221,23 @@ var EXPERIENCE_STUDY = (function () {
                     "for how engaging/fun it was to imagine each type (1 = least engaging/fun; 5 = most engaging/fun):",
                     type: 'survey-multi-choice',
                     questions: [
-                        {prompt: "<b>READING</b> the story only", options: rank_options, required: true, horizontal: true},
+                        {
+                            prompt: "<b>READING</b> the story only",
+                            options: rank_options,
+                            required: true,
+                            horizontal: true},
+                        {
+                            prompt: "Seeing a <b>PICTURE</b> + <b>READING</b> the story",
+                            options: rank_options,
+                            required: true,
+                            horizontal: true
+                        },
+                        {
+                            prompt: "Seeing a <b>PICTURE</b> + hearing a <b>BACKGROUND SOUND</b> + <b>READING</b> the story",
+                            options: rank_options,
+                            required: true,
+                            horizontal: true
+                        },
                         {
                             prompt: "<b>LISTENING</b> to the story only",
                             options: rank_options,
@@ -227,25 +245,13 @@ var EXPERIENCE_STUDY = (function () {
                             horizontal: true
                         },
                         {
-                            prompt: "Seeing a picture + <b>READING</b> the story",
+                            prompt: "Seeing a <b>PICTURE</b> + <b>LISTENING</b> to the story",
                             options: rank_options,
                             required: true,
                             horizontal: true
                         },
                         {
-                            prompt: "Seeing a picture + <b>LISTENING</b> to the story",
-                            options: rank_options,
-                            required: true,
-                            horizontal: true
-                        },
-                        {
-                            prompt: "Seeing a picture + hearing background noise + <b>READING</b> the story",
-                            options: rank_options,
-                            required: true,
-                            horizontal: true
-                        },
-                        {
-                            prompt: "Seeing a picture + hearing background noise + <b>LISTENING</b> to the story",
+                            prompt: "Seeing a <b>PICTURE</b> + hearing a <b>BACKGROUND SOUND</b> + <b>LISTENING</b> to the story",
                             options: rank_options,
                             required: true,
                             horizontal: true
@@ -304,7 +310,7 @@ var EXPERIENCE_STUDY = (function () {
                      * SCENARIO BASED TRIALS
                      ***********************************************/
 
-                    var introduction_text = "For the next couple of stories, you will ";
+                    var introduction_text = "For the next 4 stories, you will ";
                     var banner_text = "";
                     switch (immersion) {
                         case("picture"):
@@ -313,19 +319,19 @@ var EXPERIENCE_STUDY = (function () {
                             break;
                         case("picture_sound"):
                             banner_text = "Picture and Sound + ";
-                            introduction_text += "see a PICTURE and listen to a background sound before you ";
+                            introduction_text += "see a PICTURE and listen to a BACKGROUND SOUND before you ";
                             break;
                         default:
                             introduction_text += "";
                     }
                     switch (format) {
                         case("Auditory"):
-                            banner_text += "Listening to Story";
-                            introduction_text += "<b>LISTEN</b> to the story. ";
+                            banner_text += "Listening to the Story";
+                            introduction_text += "LISTEN to the story. ";
                             break;
                         default:
                             banner_text += "Reading the Story";
-                            introduction_text += "<b>READ</b> the story. ";
+                            introduction_text += "READ the story. ";
                     }
 
                     // An introduction / instructions

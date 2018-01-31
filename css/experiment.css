@@ -126,7 +126,7 @@ div.piPlayerHeader {
 }
 
 #banner {
-    display: block;
+    display: none;
     font-weight: bold;
     width: 100%;
     text-align: right;
