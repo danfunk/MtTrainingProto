@@ -281,7 +281,6 @@ var EXPERIENCE_STUDY = (function () {
 
                 /* create experiment timeline array */
                 var timeline = [];
-                timeline.push(final);
                 timeline.push(consent);
                 timeline.push(lemon_exercise);
                 timeline.push(introduction);
@@ -530,6 +529,7 @@ var EXPERIENCE_STUDY = (function () {
                 }
                 timeline.push(rank_experiences);
                 timeline.push(debrief);
+                timeline.push(final);
 
 
                 function saveData() {
