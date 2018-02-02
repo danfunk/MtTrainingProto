@@ -111,7 +111,7 @@ var EXPERIENCE_STUDY = (function () {
                                 "<div class='piIntro'> " +
                                 "<img src='" + my.base_url + "images/compass-blue.png' > " +
                                 "<p> In this study, you will see a set of short stories. All stories will start with the story's title, so you know what the story is about. " +
-                                "The stories will be presented in different formats, somtimes including pictures and sounds.</p> " +
+                                "The stories will be presented in different formats, sometimes including pictures and sounds.</p> " +
                                 "<br clear='all'> " +
                                 "<b>For each story:</b> " +
                                 "<ul> " +
@@ -169,11 +169,11 @@ var EXPERIENCE_STUDY = (function () {
                     "negative can reduce anxiety. In the current study, we are evaluating if it is possible to change " +
                     "interpretations over the Internet. We are also testing several variations that may affect the strength of these" +
                     " interventions. During this study, you read or listened to stories after seeing pictures or pictures and " +
-                    "background noises, these are designed to increase your ability to imagine the stories and to increase your " +
-                    "engagement in the task),</p>" +
+                    "background noises (these are designed to increase your ability to imagine the stories and to increase your " +
+                    "engagement in the task.)</p>" +
                     "<p> Previous laboratory-based studies have shown that making interpretations more positive and less negative " +
-                    "can reduce anxiety. In the current study, we You may have been selected for this study because you reported " +
-                    "some anxiety on the initial questions that helped determine your eligibility for this study. This does not mean " +
+                    "can reduce anxiety. In the current study, you may have been selected for this study because you reported " +
+                    "some anxiety on the initial questions that helped determine your eligibility. This does not mean " +
                     "you have an anxiety disorder.  However, if you feel especially concerned about your anxiety, or would like to " +
                     "talk to someone about the problems you might be having, please follow the mental health resources link on " +
                     "this site: https://implicit.harvard.edu/implicit/user/pimh/linkinfo.html</p>" +
@@ -276,6 +276,12 @@ var EXPERIENCE_STUDY = (function () {
                             horizontal: true
                         },
                     ]
+                };
+
+                var close_eyes_trial = {
+                    type: 'html-button-response',
+                    choices: ['1 (not at all)', '2 (sometimes)', '3 (always)'],
+                    stimulus:  'When you were LISTENING to the stories, did you close your eyes?'
                 };
 
 
@@ -442,7 +448,7 @@ var EXPERIENCE_STUDY = (function () {
                     var multi_choice_trial_1 = {
                         type: 'html-button-response',
                         choices: choices,
-                        stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first hand)?</h1>',
+                        stimulus: '<h1>How <b>vividly</b> did you imagine the scenario (as if you were really there and experiencing it first-hand)?</h1>',
                         data: {immersion: immersion, format: format, scenario: scenario}
                     };
                     var multi_choice_trial_2 = {
@@ -525,12 +531,11 @@ var EXPERIENCE_STUDY = (function () {
                     timeline.push(multi_choice_trial_3);
                     timeline.push(multi_choice_trial_4);
                     timeline.push(multi_choice_trial_5);
-                    break;
                 }
                 timeline.push(rank_experiences);
+                timeline.push(close_eyes_trial);
                 timeline.push(debrief);
                 timeline.push(final);
-
 
                 function saveData() {
                     var xhr = new XMLHttpRequest();
