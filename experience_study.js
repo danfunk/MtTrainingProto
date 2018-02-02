@@ -287,7 +287,7 @@ var EXPERIENCE_STUDY = (function () {
 
                 /* create experiment timeline array */
                 var timeline = [];
-                timeline.push(consent);
+                // timeline.push(consent);   Don't add the consent form.
                 timeline.push(lemon_exercise);
                 timeline.push(introduction);
 
